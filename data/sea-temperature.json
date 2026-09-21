@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T07:00:00+09:00",
+  "updatedAt": "2026-09-22T07:30:00+09:00",
   "stations": [
     {
       "id": "owase",
@@ -15,7 +15,8 @@
       "temp": null,
       "observedAt": null,
       "status": "接続準備",
-      "source": "https://www.mpstpc.pref.mie.lg.jp/SUI/shigen/ukigyo/Hp/"
+      "source": "https://www.pref.mie.lg.jp/common/content/000892397.pdf",
+      "note": "三重県水産研究所資料で魚類養殖が盛んな漁場として水温測定実績を確認。漁場ごとの差が大きいため、近隣値で代用せず専用値を接続予定。"
     },
     {
       "id": "mikiura",
@@ -23,7 +24,12 @@
       "temp": null,
       "observedAt": null,
       "status": "接続準備",
-      "source": "https://www.city.owase.lg.jp/0000005905.html"
+      "source": "https://www.pref.mie.lg.jp/common/content/001246871.pdf",
+      "depths": [
+        0,
+        15
+      ],
+      "note": "三重県水産研究所の自動観測機器で表層・水深15mを観測。数値の機械取得経路を調整中。"
     },
     {
       "id": "uwajima",
@@ -39,7 +45,8 @@
       "temp": null,
       "observedAt": null,
       "status": "接続準備",
-      "source": "https://www.pref.ehime.jp/"
+      "source": "https://www.pref.ehime.jp/",
+      "note": "愛南は久良など魚類養殖海域を対象。公式・研究機関の継続観測値を優先して接続予定。"
     },
     {
       "id": "sukumo",
@@ -47,7 +54,8 @@
       "temp": null,
       "observedAt": null,
       "status": "公式情報",
-      "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html"
+      "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html",
+      "note": "高知県が宿毛湾内1地点の水温観測ブイを運用。公式ページは2026/9/17まで高水温情報を継続公開。"
     },
     {
       "id": "azuma",
