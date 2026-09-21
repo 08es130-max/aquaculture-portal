@@ -1,0 +1,141 @@
+{
+  "updatedAt": "2026-09-22T07:00:00+09:00",
+  "stations": [
+    {
+      "id": "owase",
+      "area": "三重・尾鷲湾",
+      "temp": null,
+      "observedAt": null,
+      "status": "公式観測",
+      "source": "https://www.city.owase.lg.jp/0000005905.html"
+    },
+    {
+      "id": "hikimoto",
+      "area": "三重・引本浦",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.mpstpc.pref.mie.lg.jp/SUI/shigen/ukigyo/Hp/"
+    },
+    {
+      "id": "mikiura",
+      "area": "三重・三木浦",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.city.owase.lg.jp/0000005905.html"
+    },
+    {
+      "id": "uwajima",
+      "area": "愛媛・宇和島",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.ehime.jp/"
+    },
+    {
+      "id": "ainan",
+      "area": "愛媛・愛南",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.ehime.jp/"
+    },
+    {
+      "id": "sukumo",
+      "area": "高知・宿毛湾",
+      "temp": null,
+      "observedAt": null,
+      "status": "公式情報",
+      "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html"
+    },
+    {
+      "id": "azuma",
+      "area": "鹿児島・長島（東町）",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
+    },
+    {
+      "id": "tarumizu",
+      "area": "鹿児島・垂水",
+      "temp": null,
+      "observedAt": null,
+      "status": "観測源あり",
+      "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
+    },
+    {
+      "id": "kinko",
+      "area": "鹿児島・錦江湾",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
+    },
+    {
+      "id": "kanoya",
+      "area": "鹿児島・鹿屋周辺",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
+    },
+    {
+      "id": "saiki",
+      "area": "大分・佐伯（上浦）",
+      "temp": 25.5,
+      "observedAt": "2026年9月中旬 旬平均",
+      "status": "公式観測",
+      "source": "https://www.pref.oita.jp/site/nourinsuisan/kamiurateichisuion.html"
+    },
+    {
+      "id": "amakusa",
+      "area": "熊本・天草",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.kumamoto.jp/soshiki/95/80817.html"
+    },
+    {
+      "id": "ushibuka",
+      "area": "熊本・牛深",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.kumamoto.jp/soshiki/95/80817.html"
+    },
+    {
+      "id": "tachibana",
+      "area": "長崎・橘湾",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.nagasaki.jp/"
+    },
+    {
+      "id": "goto",
+      "area": "長崎・五島",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.pref.nagasaki.jp/"
+    },
+    {
+      "id": "taira",
+      "area": "長崎・多以良",
+      "temp": 27.5,
+      "observedAt": "2026/9/16 09:00・水深2m",
+      "status": "公式観測",
+      "source": "https://www.pref.nagasaki.jp/bunrui/shigoto-sangyo/suisangho/gyoko-gyojo/suisan-shiken-suishi-teichi-water-temperature/r8/"
+    },
+    {
+      "id": "nobeoka",
+      "area": "宮崎・延岡周辺",
+      "temp": null,
+      "observedAt": null,
+      "status": "接続準備",
+      "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
+    }
+  ]
+}
