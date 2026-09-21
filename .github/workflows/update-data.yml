@@ -1,0 +1,24 @@
+name: Update aquaculture data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6,12,18 * * *"
+      timezone: "Asia/Tokyo"
+permissions:
+  contents: read
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Check public data sources
+        run: python scripts/update_data.py
+      - name: Upload refreshed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: aquaculture-data
+          path: data/
+          retention-days: 14
