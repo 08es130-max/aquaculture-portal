@@ -5,7 +5,7 @@ on:
     - cron: "17 6,12,18 * * *"
       timezone: "Asia/Tokyo"
 permissions:
-  contents: read
+  contents: write
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -16,6 +16,14 @@ jobs:
           python-version: "3.13"
       - name: Check public data sources
         run: python scripts/update_data.py
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update aquaculture public data"
+          git push
       - name: Upload refreshed data
         uses: actions/upload-artifact@v4
         with:
