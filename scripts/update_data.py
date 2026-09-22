@@ -123,7 +123,7 @@ if spdf:
 # temperatures for each named station.  These are monthly observations, not live telemetry.
 ow=next((x for x in data["stations"] if x["id"]=="owase"),{})
 try:
-    oh=fetch("https://www.city.owase.lg.jp/0000005905.html")
+    oh=get("https://www.city.owase.lg.jp/0000005905.html")
     ol=links(oh,"https://www.city.owase.lg.jp/0000005905.html")
     candidates=[]
     for title,url in ol:
