@@ -53,7 +53,16 @@ try:
                 status="公式情報更新",source=su,
                 note="高知県の宿毛湾環境調査・海水温情報。高水温・赤潮情報も同じ公式ページから確認。")
     ls=links(h,su)
-    latest_pdf=next((u for t,u in ls if "宿毛湾内の海水温情報" in t and "高水温情報" in t),None)
+    # Link labels are short document names; select the first PDF associated with the
+    # latest water-temperature row, rather than requiring the long row title in <a>.
+    latest_pdf=None
+    for t,u in ls:
+        if ("宿毛湾" in t and ("水温" in t or re.search(r'26(?:09|0?9)1[0-9]',t)) and (".pdf" in u.lower() or "file_type=" in u)):
+            latest_pdf=u; break
+    if not latest_pdf:
+        # NABRAS sometimes exposes document links via ?file_type=...&key=...
+        m=re.search(r'href=["\']([^"\']*(?:file_type|files/redtide)[^"\']*)["\'][^>]*>[^<]*(?:260916|宿毛湾)',h,re.I)
+        if m: latest_pdf=urllib.parse.urljoin(su,m.group(1))
     set_station(data,"sukumo",documents={"最新水温情報":latest_pdf},depths=[1,5,10])
     checks["sukumo"]="ok"
 except Exception as e: checks["sukumo"]=type(e).__name__
@@ -93,7 +102,7 @@ if spdf:
     t=pdf_text(spdf)
     maxima={}
     for dep in (1,5,10):
-        m=re.search(rf'水深\s*{dep}\s*m[^\n。]*?(\d{{2}}(?:\.\d+)?)\s*℃',t,re.S)
+        m=re.search(rf'水深\s*{dep}\s*[mｍ][^。\n]{{0,80}}?(\d{{2}}(?:\.\d+)?)\s*℃',t,re.I)
         if m: maxima[str(dep)]=float(m.group(1))
     if maxima: sus["periodMaxByDepth"]=maxima
 
