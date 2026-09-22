@@ -107,7 +107,10 @@ if spdf:
     for dep in (1,5,10):
         # Official weekly bulletin wording: "水深1mで9月...に30.12℃".
         # pdftotext may insert whitespace/newlines, so allow a bounded multiline span.
-        m=re.search(rf'水深\\s*{dep}\\s*[mｍ][\\s\\S]{{0,180}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
+        m=re.search(rf'水深\\s*[１1５5０0]{{0,1}}{dep if dep < 10 else ""}\\s*[mｍ][\\s\\S]{{0,240}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
+        if not m:
+            label={1:"１",5:"５",10:"10"}[dep]
+            m=re.search(rf'水深\\s*{label}\\s*[mｍ][\\s\\S]{{0,240}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
         if m: maxima[str(dep)]=float(m.group(1))
     if maxima: sus["periodMaxByDepth"]=maxima
 
