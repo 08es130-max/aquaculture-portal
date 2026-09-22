@@ -4,3 +4,5 @@
 .history-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem}.history-table{width:100%;border-collapse:collapse;font-size:.82rem}.history-table th,.history-table td{padding:.42rem;border-bottom:1px solid #e6ecee;text-align:left}.history-table th{color:#587078}
 
 .temp-chart{width:100%;height:auto;margin:.4rem 0 .8rem;overflow:visible}.temp-chart line{stroke:currentColor;opacity:.25;stroke-width:1}.temp-chart polyline{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.temp-chart circle{fill:currentColor}.temp-chart text{fill:currentColor;font-size:11px;opacity:.7}
+
+.chart-legend{display:flex;gap:.8rem;font-size:.78rem;font-weight:700;margin-top:.4rem}.chart-legend span:before{content:"";display:inline-block;width:18px;border-top:3px solid currentColor;margin-right:.3rem;vertical-align:middle}.temp-chart .s1{stroke-dasharray:7 5;opacity:.65}.temp-chart circle.s1{stroke-dasharray:none}.temp-chart .s2{stroke-dasharray:2 5;opacity:.5}
