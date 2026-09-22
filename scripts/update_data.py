@@ -103,6 +103,7 @@ sus=next((x for x in data["stations"] if x["id"]=="sukumo"),{})
 spdf=(sus.get("documents") or {}).get("最新水温情報")
 if spdf:
     t=pdf_text(spdf)
+    print("SUKUMO_TEXT_SAMPLE", repr(t[:2500]))
     maxima={}
     for dep in (1,5,10):
         # Official weekly bulletin wording: "水深1mで9月...に30.12℃".
