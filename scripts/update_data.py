@@ -130,7 +130,7 @@ try:
         m=re.search(r'尾鷲湾[　 ]*(\\d{1,2})月',title)
         # Current city page often labels the links simply "8月" rather than
         # repeating "尾鷲湾" in every anchor.
-        if not m: m=re.fullmatch(r'\\s*(\\d{1,2})月\\s*',title)
+        if not m: m=re.search(r'(\\d{1,2})月',title)
         if m and (url.lower().endswith(".pdf") or ".pdf" in url.lower()): candidates.append((int(m.group(1)),url,title))
     if candidates:
         month,url,_=max(candidates,key=lambda z:z[0])
