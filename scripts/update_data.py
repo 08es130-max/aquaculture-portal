@@ -4,7 +4,7 @@ This updater intentionally parses only fields that are reliably available as HTM
 PDF-only measured temperatures are exposed as source/update metadata until a robust
 source-specific parser is added. This avoids publishing guessed temperatures.
 """
-import json, pathlib, urllib.request, re, datetime
+import json, pathlib, urllib.request, urllib.parse, re, datetime
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 DATA=ROOT/"data"/"sea-temperature.json"
 UA={"User-Agent":"aquaculture-portal/0.4 (public fisheries data aggregator)"}
@@ -21,7 +21,11 @@ def set_station(data, sid, **kw):
 data=json.loads(DATA.read_text(encoding="utf-8"))
 checks={}
 
-# Uwajima City: page gives the latest publication date and links to Yusu/Komobuchi PDFs.
+def links(html, base):
+    return [(re.sub(r"<[^>]+>","",txt).strip(), urllib.parse.urljoin(base,href))
+            for href,txt in re.findall(r'href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',html,re.I|re.S)]
+
+# Uwajima City: detect current Yusu/Komobuchi publications and keep direct PDF links.
 uw="https://www.city.uwajima.ehime.jp/soshiki/23/kaikyoujyouhou.html"
 try:
     h=get(uw)
@@ -30,6 +34,10 @@ try:
     set_station(data,"uwajima",observedAt=(latest+" 海水温情報更新" if latest else None),
                 status="公式情報更新",source=uw,
                 note="宇和島市・遊子/蔣淵の海水温情報。月2回（月初・中旬）更新。")
+    ls=links(h,uw)
+    yusu=next((u for t,u in ls if "遊子地区" in t and "海水温情報" in t and "2026年" in t),None)
+    komo=next((u for t,u in ls if "蔣淵地区" in t and "海水温情報" in t and "2026年" in t),None)
+    set_station(data,"uwajima",documents={"遊子":yusu,"蔣淵":komo})
     checks["uwajima"]="ok"
 except Exception as e: checks["uwajima"]=type(e).__name__
 
@@ -43,6 +51,9 @@ try:
     set_station(data,"sukumo",observedAt=(latest+" 公式情報更新" if latest else None),
                 status="公式情報更新",source=su,
                 note="高知県の宿毛湾環境調査・海水温情報。高水温・赤潮情報も同じ公式ページから確認。")
+    ls=links(h,su)
+    latest_pdf=next((u for t,u in ls if "宿毛湾内の海水温情報" in t and "高水温情報" in t),None)
+    set_station(data,"sukumo",documents={"最新水温情報":latest_pdf},depths=[1,5,10])
     checks["sukumo"]="ok"
 except Exception as e: checks["sukumo"]=type(e).__name__
 
