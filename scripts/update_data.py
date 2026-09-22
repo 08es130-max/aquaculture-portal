@@ -7,6 +7,7 @@ source-specific parser is added. This avoids publishing guessed temperatures.
 import json, pathlib, urllib.request, urllib.parse, re, datetime, subprocess, tempfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 DATA=ROOT/"data"/"sea-temperature.json"
+HISTORY=ROOT/"data"/"history.json"
 UA={"User-Agent":"aquaculture-portal/0.4 (public fisheries data aggregator)"}
 
 def get(url):
@@ -96,7 +97,43 @@ if spdf:
         if m: maxima[str(dep)]=float(m.group(1))
     if maxima: sus["periodMaxByDepth"]=maxima
 
-# Do not alter existing verified temperatures. Stamp successful refresh time.
+# Promote extracted official values to the station cards and persist history.
+history=json.loads(HISTORY.read_text(encoding="utf-8")) if HISTORY.exists() else {"stations":{}}
+def append_history(sid, rec):
+    a=history.setdefault("stations",{}).setdefault(sid,[])
+    key=(rec.get("date"),rec.get("depthM"),rec.get("substation"))
+    if not any((x.get("date"),x.get("depthM"),x.get("substation"))==key for x in a):
+        a.append(rec); a.sort(key=lambda x:x.get("date",""))
+
+# Uwajima: show the latest value for each official substation directly in the portal.
+if uws.get("documentValues"):
+    subs=[]
+    for name, vals in uws["documentValues"].items():
+        if not vals: continue
+        v=vals[-1]
+        # Publication date supplies year/month; day comes from the PDF measurement.
+        pub=re.search(r'(20\d{2})/(\d{1,2})/(\d{1,2})',uws.get("observedAt",""))
+        date=f"{pub.group(1)}-{int(pub.group(2)):02d}-{int(v['day']):02d}" if pub else None
+        subs.append({"name":name,"temp":v["temp"],"depthM":1,"observedAt":date})
+        if date: append_history("uwajima",{"date":date,"temp":v["temp"],"depthM":1,"substation":name,"kind":"公式観測"})
+    if subs:
+        uws["measurements"]=subs
+        uws["temp"]=subs[0]["temp"]
+        uws["status"]="最新実測値"
+
+# Sukumo: expose depth-specific values directly when the official PDF parser succeeds.
+if sus.get("periodMaxByDepth"):
+    sus["measurements"]=[{"depthM":int(d),"temp":v} for d,v in sorted(sus["periodMaxByDepth"].items(),key=lambda x:int(x[0]))]
+    sus["temp"]=sus["measurements"][0]["temp"]
+    sus["status"]="最新公式値"
+    pub=re.search(r'(20\d{2})/(\d{1,2})/(\d{1,2})',sus.get("observedAt",""))
+    if pub:
+        date=f"{pub.group(1)}-{int(pub.group(2)):02d}-{int(pub.group(3)):02d}"
+        for m in sus["measurements"]: append_history("sukumo",{"date":date,"temp":m["temp"],"depthM":m["depthM"],"kind":"公式資料"})
+
+HISTORY.write_text(json.dumps(history,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+
+# Stamp refresh time.
 now=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
 data["updatedAt"]=now.isoformat(timespec="seconds")
 data["sourceChecks"]=checks
