@@ -74,7 +74,10 @@ set_station(data,"mikiura",status="自動観測源確認",source="https://www.pr
 # PDF text extraction: use pdftotext when available on the Actions runner.
 def pdf_text(url):
     try:
-        req=urllib.request.Request(url,headers=UA)
+        # Percent-encode Japanese/non-ASCII path characters before urllib Request.
+        p=urllib.parse.urlsplit(url)
+        safe_url=urllib.parse.urlunsplit((p.scheme,p.netloc,urllib.parse.quote(urllib.parse.unquote(p.path),safe="/%"),p.query,p.fragment))
+        req=urllib.request.Request(safe_url,headers=UA)
         raw=urllib.request.urlopen(req,timeout=30).read()
         with tempfile.TemporaryDirectory() as td:
             pdf=pathlib.Path(td)/"source.pdf"; txt=pathlib.Path(td)/"source.txt"
