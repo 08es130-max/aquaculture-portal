@@ -118,6 +118,40 @@ if spdf:
         sus["temp"]=None
         sus.pop("measurements",None)
 
+
+# Owase Bay: discover the latest monthly official bulletin and publish the 2 m
+# temperatures for each named station.  These are monthly observations, not live telemetry.
+ow=next((x for x in data["stations"] if x["id"]=="owase"),{})
+try:
+    oh=fetch("https://www.city.owase.lg.jp/0000005905.html")
+    ol=links(oh,"https://www.city.owase.lg.jp/0000005905.html")
+    candidates=[]
+    for title,url in ol:
+        m=re.search(r'尾鷲湾[　 ]*(\\d{1,2})月',title)
+        if m and (url.lower().endswith(".pdf") or ".pdf" in url.lower()): candidates.append((int(m.group(1)),url,title))
+    if candidates:
+        month,url,_=max(candidates,key=lambda z:z[0])
+        ot=pdf_text(url)
+        dm=re.search(r'令和8年(\\d{1,2})月(\\d{1,2})日',ot)
+        obs=f"2026-{int(dm.group(1)):02d}-{int(dm.group(2)):02d}" if dm else None
+        # pdftotext -layout emits the six stations as consecutive 0/2/5/... rows.
+        rows=re.findall(r'^\\s*(0|2|5|10|20|B-1)\\s+(\\d{1,2}(?:\\.\\d+)?)\\s+',ot,re.M)
+        groups=[]; cur=[]
+        for dep,val in rows:
+            if dep=="0" and cur: groups.append(cur); cur=[]
+            cur.append((dep,float(val)))
+        if cur: groups.append(cur)
+        names=["須賀利養殖場","行野浦養殖場","尾南曽鼻","古里養殖場","大曽根養殖場","湾中央部"]
+        ms=[]
+        for name,g in zip(names,groups):
+            two=next((v for d,v in g if d=="2"),None)
+            if two is not None: ms.append({"name":name,"depthM":2,"temp":two,"observedAt":obs})
+        if ms:
+            ow["measurements"]=ms; ow["temp"]=next((m["temp"] for m in ms if m["name"]=="湾中央部"),ms[0]["temp"])
+            ow["depthM"]=2; ow["observedAt"]=obs; ow["status"]="最新公式観測"; ow["documents"]={"最新水質速報":url}
+except Exception as e:
+    print("OWASE_FAILED",type(e).__name__,str(e)[:120])
+
 # Promote extracted official values to the station cards and persist history.
 history=json.loads(HISTORY.read_text(encoding="utf-8")) if HISTORY.exists() else {"stations":{}}
 def append_history(sid, rec):
