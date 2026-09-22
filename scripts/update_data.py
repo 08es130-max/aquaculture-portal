@@ -119,41 +119,36 @@ if spdf:
         sus.pop("measurements",None)
 
 
-# Owase Bay: discover the latest monthly official bulletin and publish the 2 m
-# temperatures for each named station.  These are monthly observations, not live telemetry.
+# Owase Bay: discover the latest current-year monthly official bulletin.
 ow=next((x for x in data["stations"] if x["id"]=="owase"),{})
 try:
-    oh=get("https://www.city.owase.lg.jp/0000005905.html")
-    ol=links(oh,"https://www.city.owase.lg.jp/0000005905.html")
-    candidates=[]
+    base="https://www.city.owase.lg.jp/0000005905.html"
+    oh=get(base); ol=links(oh,base); candidates=[]
     for title,url in ol:
         m=re.search(r'尾鷲湾[　 ]*(\\d{1,2})月',title)
-        # Current city page often labels the links simply "8月" rather than
-        # repeating "尾鷲湾" in every anchor.
-        if not m: m=re.search(r'(\d{1,2})月',title)
-        if m and (url.lower().endswith(".pdf") or ".pdf" in url.lower()): candidates.append((int(m.group(1)),url,title))
+        if m and re.search(r'/26\\.\\d{1,2}\\.\\d{1,2}owasebay\\.pdf$',url,re.I):
+            candidates.append((int(m.group(1)),url,title))
     if candidates:
-        month,url,_=max(candidates,key=lambda z:z[0])
-        ot=pdf_text(url)
-        dm=re.search(r'令和8年(\\d{1,2})月(\\d{1,2})日',ot)
+        month,url,_=max(candidates,key=lambda z:z[0]); ot=pdf_text(url)
+        dm=re.search(r'観測年月日\\s*令和8年\\s*(\\d{1,2})月\\s*(\\d{1,2})日',ot)
+        if not dm: dm=re.search(r'令和8年\\s*(\\d{1,2})月\\s*(\\d{1,2})日',ot)
         obs=f"2026-{int(dm.group(1)):02d}-{int(dm.group(2)):02d}" if dm else None
-        # pdftotext -layout emits the six stations as consecutive 0/2/5/... rows.
-        rows=re.findall(r'^\\s*(0|2|5|10|20|B-1)\\s+(\\d{1,2}(?:\\.\\d+)?)\\s+',ot,re.M)
-        groups=[]; cur=[]
-        for dep,val in rows:
-            if dep=="0" and cur: groups.append(cur); cur=[]
-            cur.append((dep,float(val)))
-        if cur: groups.append(cur)
-        names=["須賀利養殖場","行野浦養殖場","尾南曽鼻","古里養殖場","大曽根養殖場","湾中央部"]
+        # Extract named station blocks and their 2 m row; avoids relying on table order.
+        aliases=[("須賀利養殖場","須賀利"),("行野浦養殖場","行野浦"),("尾南曽鼻","尾南曽"),("古里養殖場","古里"),("大曽根養殖場","大曽根"),("湾中央部","湾\\s*中\\s*央\\s*部")]
         ms=[]
-        for name,g in zip(names,groups):
-            two=next((v for d,v in g if d=="2"),None)
-            if two is not None: ms.append({"name":name,"depthM":2,"temp":two,"observedAt":obs})
+        for name,pat in aliases:
+            sm=re.search(pat,ot)
+            if not sm: continue
+            chunk=ot[sm.start():sm.start()+900]
+            tm=re.search(r'(?m)^\\s*2\\s+(\\d{1,2}(?:\\.\\d+)?)\\s+',chunk)
+            if tm: ms.append({"name":name,"depthM":2,"temp":float(tm.group(1)),"observedAt":obs})
         if ms:
             ow["measurements"]=ms; ow["temp"]=next((m["temp"] for m in ms if m["name"]=="湾中央部"),ms[0]["temp"])
             ow["depthM"]=2; ow["observedAt"]=obs; ow["status"]="最新公式観測"; ow["documents"]={"最新水質速報":url}
+        else: print("OWASE_PARSE_NO_MEASUREMENTS",repr(ot[:1800]))
+    else: print("OWASE_NO_CURRENT_PDF")
 except Exception as e:
-    print("OWASE_FAILED",type(e).__name__,str(e)[:120])
+    print("OWASE_FAILED",type(e).__name__,str(e)[:160])
 
 # Promote extracted official values to the station cards and persist history.
 history=json.loads(HISTORY.read_text(encoding="utf-8")) if HISTORY.exists() else {"stations":{}}
