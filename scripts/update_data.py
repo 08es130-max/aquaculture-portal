@@ -125,6 +125,7 @@ ow=next((x for x in data["stations"] if x["id"]=="owase"),{})
 try:
     oh=get("https://www.city.owase.lg.jp/0000005905.html")
     ol=links(oh,"https://www.city.owase.lg.jp/0000005905.html")
+    print("OWASE_LINKS", [(t,u) for t,u in ol if "月" in t or ".pdf" in u.lower()][:30])
     candidates=[]
     for title,url in ol:
         m=re.search(r'尾鷲湾[　 ]*(\\d{1,2})月',title)
