@@ -6,3 +6,5 @@
 .temp-chart{width:100%;height:auto;margin:.4rem 0 .8rem;overflow:visible}.temp-chart line{stroke:currentColor;opacity:.25;stroke-width:1}.temp-chart polyline{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.temp-chart circle{fill:currentColor}.temp-chart text{fill:currentColor;font-size:11px;opacity:.7}
 
 .chart-legend{display:flex;gap:.8rem;font-size:.78rem;font-weight:700;margin-top:.4rem}.chart-legend span:before{content:"";display:inline-block;width:18px;border-top:3px solid currentColor;margin-right:.3rem;vertical-align:middle}.temp-chart .s1{stroke-dasharray:7 5;opacity:.65}.temp-chart circle.s1{stroke-dasharray:none}.temp-chart .s2{stroke-dasharray:2 5;opacity:.5}
+
+.depth-values{display:flex;flex-wrap:wrap;gap:.45rem;margin:.65rem 0}.depth-values span{padding:.35rem .55rem;border-radius:.55rem;background:rgba(0,0,0,.045);font-size:.82rem}.depth-values strong{font-size:1rem}
