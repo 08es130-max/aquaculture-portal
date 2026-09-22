@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T10:09:11+09:00",
+  "updatedAt": "2026-09-22T10:16:32+09:00",
   "stations": [
     {
       "id": "owase",
@@ -106,7 +106,7 @@
       "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html",
       "note": "高知県の宿毛湾環境調査・海水温情報。高水温・赤潮情報も同じ公式ページから確認。",
       "documents": {
-        "最新水温情報": null
+        "最新水温情報": "https://kmi-nabras.pref.kochi.lg.jp/files/redtide/6957cb418044441cb06d2f56339b42bc/R80916_宿毛湾水温情報_.pdf"
       },
       "depths": [
         1,
