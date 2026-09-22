@@ -103,17 +103,20 @@ sus=next((x for x in data["stations"] if x["id"]=="sukumo"),{})
 spdf=(sus.get("documents") or {}).get("最新水温情報")
 if spdf:
     t=pdf_text(spdf)
-    print("SUKUMO_TEXT_SAMPLE", repr(t[:2500]))
+    # The bulletin explicitly reports the maximum recorded temperature for each
+    # depth during the stated period. Preserve that meaning; do not call it a
+    # latest/current observation.
     maxima={}
     for dep in (1,5,10):
-        # Official weekly bulletin wording: "水深1mで9月...に30.12℃".
-        # pdftotext may insert whitespace/newlines, so allow a bounded multiline span.
-        m=re.search(rf'水深\\s*[１1５5０0]{{0,1}}{dep if dep < 10 else ""}\\s*[mｍ][\\s\\S]{{0,240}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
-        if not m:
-            label={1:"１",5:"５",10:"10"}[dep]
-            m=re.search(rf'水深\\s*{label}\\s*[mｍ][\\s\\S]{{0,240}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
+        labels={1:"[1１]",5:"[5５]",10:"(?:10|１０)"}[dep]
+        m=re.search(rf'水深\\s*{labels}\\s*[mｍ]で[\\s\\S]{{0,80}}?に\\s*(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
         if m: maxima[str(dep)]=float(m.group(1))
-    if maxima: sus["periodMaxByDepth"]=maxima
+    if maxima:
+        sus["periodMaxByDepth"]=maxima
+        sus["periodMaxLabel"]="掲載期間中の最高水温"
+        # Do not promote period maxima into temp/measurements.
+        sus["temp"]=None
+        sus.pop("measurements",None)
 
 # Promote extracted official values to the station cards and persist history.
 history=json.loads(HISTORY.read_text(encoding="utf-8")) if HISTORY.exists() else {"stations":{}}
