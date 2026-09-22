@@ -1,5 +1,9 @@
 name: Update aquaculture data
 on:
+  push:
+    paths:
+      - 'scripts/update_data.py'
+      - '.github/workflows/update-data.yml'
   workflow_dispatch:
   schedule:
     - cron: "17 6,12,18 * * *"
