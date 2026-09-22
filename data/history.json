@@ -54,6 +54,22 @@
         "depthM": 10,
         "kind": "period-max"
       }
+    ],
+    "uwajima": [
+      {
+        "date": "2026-09-15",
+        "temp": 26.7,
+        "depthM": 1,
+        "substation": "遊子",
+        "kind": "公式観測"
+      },
+      {
+        "date": "2026-09-15",
+        "temp": 25.5,
+        "depthM": 1,
+        "substation": "蔣淵",
+        "kind": "公式観測"
+      }
     ]
   }
 }

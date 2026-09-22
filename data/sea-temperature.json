@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T07:30:00+09:00",
+  "updatedAt": "2026-09-22T10:09:11+09:00",
   "stations": [
     {
       "id": "owase",
@@ -23,21 +23,70 @@
       "area": "三重・三木浦",
       "temp": null,
       "observedAt": null,
-      "status": "接続準備",
+      "status": "自動観測源確認",
       "source": "https://www.pref.mie.lg.jp/common/content/001246871.pdf",
       "depths": [
         0,
         15
       ],
-      "note": "三重県水産研究所の自動観測機器で表層・水深15mを観測。数値の機械取得経路を調整中。"
+      "note": "三重県水産研究所の三木浦地先自動観測（表層・水深15m）。公開データの機械取得経路を調整中。"
     },
     {
       "id": "uwajima",
       "area": "愛媛・宇和島",
-      "temp": null,
-      "observedAt": null,
-      "status": "接続準備",
-      "source": "https://www.pref.ehime.jp/"
+      "temp": 26.7,
+      "observedAt": "2026/9/16 海水温情報更新",
+      "status": "最新実測値",
+      "source": "https://www.city.uwajima.ehime.jp/soshiki/23/kaikyoujyouhou.html",
+      "note": "宇和島市・遊子/蔣淵の海水温情報。月2回（月初・中旬）更新。",
+      "documents": {
+        "遊子": "https://www.city.uwajima.ehime.jp/uploaded/life/133505_621688_misc.pdf",
+        "蔣淵": "https://www.city.uwajima.ehime.jp/uploaded/life/133505_621687_misc.pdf"
+      },
+      "documentValues": {
+        "遊子": [
+          {
+            "day": 25,
+            "temp": 27.7
+          },
+          {
+            "day": 4,
+            "temp": 27.1
+          },
+          {
+            "day": 15,
+            "temp": 26.7
+          }
+        ],
+        "蔣淵": [
+          {
+            "day": 25,
+            "temp": 28.3
+          },
+          {
+            "day": 4,
+            "temp": 26.4
+          },
+          {
+            "day": 15,
+            "temp": 25.5
+          }
+        ]
+      },
+      "measurements": [
+        {
+          "name": "遊子",
+          "temp": 26.7,
+          "depthM": 1,
+          "observedAt": "2026-09-15"
+        },
+        {
+          "name": "蔣淵",
+          "temp": 25.5,
+          "depthM": 1,
+          "observedAt": "2026-09-15"
+        }
+      ]
     },
     {
       "id": "ainan",
@@ -52,10 +101,18 @@
       "id": "sukumo",
       "area": "高知・宿毛湾",
       "temp": null,
-      "observedAt": null,
-      "status": "公式情報",
+      "observedAt": "2026/09/17 公式情報更新",
+      "status": "公式情報更新",
       "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html",
-      "note": "高知県が宿毛湾内1地点の水温観測ブイを運用。公式ページは2026/9/17まで高水温情報を継続公開。"
+      "note": "高知県の宿毛湾環境調査・海水温情報。高水温・赤潮情報も同じ公式ページから確認。",
+      "documents": {
+        "最新水温情報": null
+      },
+      "depths": [
+        1,
+        5,
+        10
+      ]
     },
     {
       "id": "azuma",
@@ -145,5 +202,9 @@
       "status": "接続準備",
       "source": "https://www.jodc.go.jp/data/coastal/kikan_list.htm"
     }
-  ]
+  ],
+  "sourceChecks": {
+    "uwajima": "ok",
+    "sukumo": "ok"
+  }
 }
