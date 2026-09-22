@@ -102,7 +102,9 @@ if spdf:
     t=pdf_text(spdf)
     maxima={}
     for dep in (1,5,10):
-        m=re.search(rf'水深\s*{dep}\s*[mｍ][^。\n]{{0,80}}?(\d{{2}}(?:\.\d+)?)\s*℃',t,re.I)
+        # Official weekly bulletin wording: "水深1mで9月...に30.12℃".
+        # pdftotext may insert whitespace/newlines, so allow a bounded multiline span.
+        m=re.search(rf'水深\s*{dep}\s*[mｍ][\\s\\S]{{0,180}}?(\\d{{2}}(?:\\.\\d+)?)\\s*℃',t,re.I)
         if m: maxima[str(dep)]=float(m.group(1))
     if maxima: sus["periodMaxByDepth"]=maxima
 
