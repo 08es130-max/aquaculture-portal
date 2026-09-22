@@ -14,6 +14,46 @@
         "depthM": 2,
         "kind": "観測"
       }
+    ],
+    "komobuchi": [
+      {
+        "date": "2025-08-11",
+        "temp": 26.1,
+        "depthM": 1,
+        "kind": "daily-09:00"
+      },
+      {
+        "date": "2025-08-21",
+        "temp": 26,
+        "depthM": 1,
+        "kind": "daily-09:00"
+      },
+      {
+        "date": "2025-09-01",
+        "temp": 26.1,
+        "depthM": 1,
+        "kind": "daily-09:00"
+      }
+    ],
+    "sukumo": [
+      {
+        "date": "2025-08-20T16:00:00+09:00",
+        "temp": 29.69,
+        "depthM": 1,
+        "kind": "period-max"
+      },
+      {
+        "date": "2025-08-20T20:00:00+09:00",
+        "temp": 28.22,
+        "depthM": 5,
+        "kind": "period-max"
+      },
+      {
+        "date": "2025-08-25T00:00:00+09:00",
+        "temp": 27.3,
+        "depthM": 10,
+        "kind": "period-max"
+      }
     ]
   }
 }
