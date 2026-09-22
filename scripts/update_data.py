@@ -4,7 +4,7 @@ This updater intentionally parses only fields that are reliably available as HTM
 PDF-only measured temperatures are exposed as source/update metadata until a robust
 source-specific parser is added. This avoids publishing guessed temperatures.
 """
-import json, pathlib, urllib.request, urllib.parse, re, datetime
+import json, pathlib, urllib.request, urllib.parse, re, datetime, subprocess, tempfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 DATA=ROOT/"data"/"sea-temperature.json"
 UA={"User-Agent":"aquaculture-portal/0.4 (public fisheries data aggregator)"}
@@ -60,6 +60,41 @@ except Exception as e: checks["sukumo"]=type(e).__name__
 # Mie Mikiura: official institute confirms automated surface/15m observations.
 set_station(data,"mikiura",status="自動観測源確認",source="https://www.pref.mie.lg.jp/common/content/001246871.pdf",
             note="三重県水産研究所の三木浦地先自動観測（表層・水深15m）。公開データの機械取得経路を調整中。")
+
+# PDF text extraction: use pdftotext when available on the Actions runner.
+def pdf_text(url):
+    try:
+        req=urllib.request.Request(url,headers=UA)
+        raw=urllib.request.urlopen(req,timeout=30).read()
+        with tempfile.TemporaryDirectory() as td:
+            pdf=pathlib.Path(td)/"source.pdf"; txt=pathlib.Path(td)/"source.txt"
+            pdf.write_bytes(raw)
+            subprocess.run(["pdftotext","-layout",str(pdf),str(txt)],check=True,timeout=30,
+                           stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            return txt.read_text(encoding="utf-8",errors="ignore")
+    except Exception as e:
+        print("PDF_TEXT_FAILED",url,type(e).__name__)
+        return ""
+
+# Extract conservative, explicitly labelled headline values only.
+uws=next((x for x in data["stations"] if x["id"]=="uwajima"),{})
+for district,url in (uws.get("documents") or {}).items():
+    if not url: continue
+    t=pdf_text(url)
+    vals=re.findall(r'(\d{1,2})\s*日\s*[→:：]?\s*(\d{1,2}(?:\.\d+)?)\s*℃',t)
+    if vals:
+        uw_summ=uws.setdefault("documentValues",{})
+        uw_summ[district]=[{"day":int(day),"temp":float(temp)} for day,temp in vals[-8:]]
+
+sus=next((x for x in data["stations"] if x["id"]=="sukumo"),{})
+spdf=(sus.get("documents") or {}).get("最新水温情報")
+if spdf:
+    t=pdf_text(spdf)
+    maxima={}
+    for dep in (1,5,10):
+        m=re.search(rf'水深\s*{dep}\s*m[^\n。]*?(\d{{2}}(?:\.\d+)?)\s*℃',t,re.S)
+        if m: maxima[str(dep)]=float(m.group(1))
+    if maxima: sus["periodMaxByDepth"]=maxima
 
 # Do not alter existing verified temperatures. Stamp successful refresh time.
 now=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
