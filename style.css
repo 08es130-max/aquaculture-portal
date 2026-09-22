@@ -2,3 +2,5 @@
 .metrics{display:flex;flex-wrap:wrap;gap:.4rem;margin:.55rem 0}.metrics span{font-size:.78rem;padding:.28rem .48rem;border-radius:999px;background:#eef7f8;color:#315b62;font-weight:700}
 
 .history-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem}.history-table{width:100%;border-collapse:collapse;font-size:.82rem}.history-table th,.history-table td{padding:.42rem;border-bottom:1px solid #e6ecee;text-align:left}.history-table th{color:#587078}
+
+.temp-chart{width:100%;height:auto;margin:.4rem 0 .8rem;overflow:visible}.temp-chart line{stroke:currentColor;opacity:.25;stroke-width:1}.temp-chart polyline{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.temp-chart circle{fill:currentColor}.temp-chart text{fill:currentColor;font-size:11px;opacity:.7}
