@@ -125,8 +125,8 @@ try:
     base="https://www.city.owase.lg.jp/0000005905.html"
     oh=get(base); ol=links(oh,base); candidates=[]
     for title,url in ol:
-        m=re.search(r'尾鷲湾[　 ]*(\\d{1,2})月',title)
-        if m and re.search(r'/26\.\d{1,2}\.\d{1,2}owasebay\.pdf
+        m=re.search(r'尾鷲湾[　 ]*(\d{1,2})月',title)
+        if m and re.search(r'/26\.\d{1,2}\.\d{1,2}owasebay\.pdf$',url,re.I):
             candidates.append((int(m.group(1)),url,title))
     if candidates:
         month,url,_=max(candidates,key=lambda z:z[0]); ot=pdf_text(url)
