@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-30T09:32:56+09:00",
+  "updatedAt": "2026-09-30T18:48:43+09:00",
   "stations": [
     {
       "id": "owase",
@@ -101,7 +101,7 @@
       "id": "sukumo",
       "area": "高知・宿毛湾",
       "temp": null,
-      "observedAt": "2026/09/17 公式情報更新",
+      "observedAt": "2026/09/30 公式情報更新",
       "status": "公式情報更新",
       "source": "https://kmi-nabras.pref.kochi.lg.jp/red_tide.html",
       "note": "高知県の宿毛湾環境調査・海水温情報。高水温・赤潮情報も同じ公式ページから確認。",
